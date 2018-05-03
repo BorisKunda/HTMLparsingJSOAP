@@ -2,6 +2,7 @@ package com.happytrees.htmlparsingjsoap;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,6 +27,12 @@ public class MainActivity extends AppCompatActivity {
 
         result = (TextView) findViewById(R.id.result);
         getBtn = (Button) findViewById(R.id.getBtn);
+        getBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getWebsite();
+            }
+        });
     }
 
 
@@ -38,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 final StringBuilder builder = new StringBuilder();
 
                 try {
-                    Document doc = Jsoup.connect("http://www.ssaurel.com/blog").get();// We use the connect() method of the Jsoup object to connect the application to the website.We call the get() method to download the content.
+                    Document doc = Jsoup.connect("http://www.ssaurel.com/blog").get();
                     String title = doc.title();
                     Elements links = doc.select("a[href]");
 
@@ -65,3 +72,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+
+/*
+In the getWebsite() method, we create a new Thread to download the content of the website.
+ We use the connect() method of the Jsoup object to connect the application to the website,
+ then we call the get() method to download the content. These calls return a Document object
+  instance. We have to call the select() method of this instance with the query to get all
+  the links of the content. This query returns an Elements instance and finally, we have just
+   to iterate on the elements contained in this object to display the content of each link to
+    the screen.At the end of our separated Thread, we refresh the UI with the links got from the website.
+     This refresh is embedded inside a runOnUiThread call because it’s forbidden to refresh the UI elements
+      inside a separated thread.
+ */
